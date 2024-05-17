@@ -82,8 +82,17 @@ public class Card {
         }
     }
     public static void swap(int i) {
-        hand.set(i, deck.get(deck.size() - 1));
-        deck.remove(deck.size() - 1);
+        if (deck.size() > 1) {
+            hand.set(i, deck.getLast());
+            deck.removeLast();
+        } else {
+            if (deck.size() == 1) {
+                hand.set(i, deck.getFirst());
+                deck.removeFirst();
+            } else {
+                hand.remove(i);
+            }
+        }
     }
 
     public static ArrayList<Card> buildDeck() {
@@ -96,6 +105,54 @@ public class Card {
             }
         }
         return deck;
+    }
+    public static boolean anotherPlayIsPossible() {
+        for (int a = 0; a < hand.size(); a++) {
+            for (Card card : hand) {
+                String c1 = hand.get(a).getValue();
+                String c2 = card.getValue();
+                int val1 = 0;
+                int val2 = 0;
+                if (!c1.equals("K") && !c1.equals("Q") && !c1.equals("J")) {
+                    if (!c2.equals("K") && !c2.equals("Q") && !c2.equals("J")) {
+                        if (c1.equals("A")) {
+                            val1 = 1;
+                        }
+                        if (c2.equals("A")) {
+                            val2 = 1;
+                        }
+                        if (!c1.equals("A")) {
+                            val1 = Integer.parseInt(c1);
+                        }
+                        if (!c2.equals("A")) {
+                            val2 = Integer.parseInt(c2);
+                        }
+                    }
+                }
+                if (val1 + val2 == 11) {
+                    return true;
+                }
+            }
+        }
+        for (int c = 0; c < hand.size(); c++) {
+            for (int d = 0; d < hand.size(); d++) {
+                for (Card card : hand) {
+                    String c1 = hand.get(c).getValue();
+                    String c2 = hand.get(d).getValue();
+                    String c3 = card.getValue();
+                    if (c1.equals("K") || c1.equals("Q") || c1.equals("J")) {
+                        if (c2.equals("K") || c2.equals("Q") || c2.equals("J")) {
+                            if (c3.equals("K") || c3.equals("Q") || c3.equals("J")) {
+                                if (!c1.equals(c2) && !c1.equals(c3) && !c2.equals(c3)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static ArrayList<Card> buildHand() {
